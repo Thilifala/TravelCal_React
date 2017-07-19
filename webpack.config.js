@@ -3,43 +3,43 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: [
-  //react-hot配置
-  // 'webpack-dev-server/client?http://localhost:3000', 
-  // 'webpack/hot/only-dev-server', 
-  //入口文件
-  './app/script/index.js'
+    //react-hot配置
+    // 'webpack-dev-server/client?http://localhost:3000', 
+    // 'webpack/hot/only-dev-server', 
+    //入口文件
+    './src/js/index.js'
   ],
   output: {
-    path: path.resolve(__dirname , 'build'),
+    path: path.resolve(__dirname, 'assets'),
     filename: 'bundle.js',
-    publicPath:'/build/' //生产环境下从该路径访问
+    publicPath: '/assets/' //生产环境下从该路径访问
   },
   module: {
-    rules:[
+    rules: [
       {
-        test: /\.(css|less)$/, 
-        include:[
-          path.resolve(__dirname,"app")
+        test: /\.(css|less)$/,
+        include: [
+          path.resolve(__dirname, "src")
         ],
         loader: 'style-loader!css-loader!postcss-loader!less-loader' //省略了-loader
       },
       {
-        test:/\.jsx?$/,
-        include:[
-          path.resolve(__dirname,"app")
+        test: /\.jsx?$/,
+        include: [
+          path.resolve(__dirname, "src")
         ],
-        loader:'babel-loader',
-        options:{
-          "presets":["react","es2015"]
+        loader: 'babel-loader',
+        options: {
+          "presets": ["react", "es2015"]
         }
       }
     ]
   },
-  resolve:{
-    extensions:['.js','.json','.jsx',".css"] //import时自动添加后缀
+  resolve: {
+    extensions: ['.js', '.json', '.jsx', ".css"] //import时自动添加后缀
   }
   ,
-  plugins:[
+  plugins: [
     new webpack.HotModuleReplacementPlugin() //react-hot配置
   ]
 }
