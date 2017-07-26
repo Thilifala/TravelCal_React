@@ -10,7 +10,7 @@ module.exports = {
     './src/js/index.js'
   ],
   output: {
-    path: path.resolve(__dirname, 'assets'),
+    path: path.resolve(__dirname, 'assets/js'),
     filename: 'bundle.js',
     publicPath: '/assets/' //生产环境下从该路径访问
   },
@@ -30,7 +30,7 @@ module.exports = {
         ],
         loader: 'babel-loader',
         options: {
-          "presets": ["react", "es2015"]
+          "presets": ["es2015","react"]
         }
       }
     ]

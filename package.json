@@ -1,11 +1,11 @@
 {
-  "name": "webpack-travelCal",
+  "name": "TRAVELCAL",
   "version": "1.0.0",
   "description": "webpack for travelCal.",
-  "main": "bundle.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-     "server": "node ./server.js"
+    "server": "node ./server.js"
   },
   "keywords": [
     "webpack",

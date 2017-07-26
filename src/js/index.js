@@ -1,11 +1,10 @@
-var React = require('react');
-var ReactDom = require('react-dom');
-// import ReactDom from 'react-dom';
+// var React = require('react');
+// var ReactDom = require('react-dom');
+import React from 'react';
+import ReactDom from 'react-dom';
 
-let textCompn = React.createClass({
-    render: function () {
-        return <div>Hello world!</div>
-    }
-})
+import TextCompn from './textCompn';
 
-ReactDOM.render(<textCompn>Hello world!</textCompn>,document.getElementById('container'));
+ReactDom.render((
+    <TextCompn />
+), document.getElementById('container'));

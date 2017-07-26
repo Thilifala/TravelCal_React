@@ -3,15 +3,15 @@ var webpack = require('webpack');
 module.exports = {
   entry: [
   //react-hot配置
-  'webpack-dev-server/client?http://localhost:3000', 
-  'webpack/hot/only-dev-server', 
+  // 'webpack-dev-server/client?http://localhost:3000', 
+  // 'webpack/hot/only-dev-server', 
   //入口文件
-  './app/script/index.js'
+  './src/js/index.js'
   ],
   output: {
-    path: __dirname + '/build',
+    path: __dirname + 'assets/js',
     filename: 'bundle.js',
-    publicPath:'/build' //生产环境下从该路径访问
+    publicPath:'/assets/' //生产环境下从该路径访问
   },
   module: {
     loaders: [
