@@ -24,6 +24,13 @@ module.exports = {
         loader: 'style-loader!css-loader!postcss-loader!less-loader' //省略了-loader
       },
       {
+        test:/\.(jpg|png)$/,
+         include: [
+          path.resolve(__dirname, "src")
+        ],
+        loader:'url-loader?limit=8192' //限制8K
+      },
+      {
         test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, "src")
