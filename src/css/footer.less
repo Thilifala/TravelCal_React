@@ -1,12 +1,35 @@
+@pngbtn-width:35px;
+@pngbtn-height:35px;
+
+#pngStyle{
+    // 语法：变量
+    width: @pngbtn-width;
+    height: @pngbtn-height;
+    border: none;
+}
+
 footer{
-    height: 2rem;
+    height: 2.5rem;
     width:100%;
-    background: gray;
+    border-top: 1px solid gray;
 
     position: fixed;
     bottom: 0;
 
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-around;
+
+    // 语法：嵌套
+    .btnAddPerson{
+        // 语法：mixin
+        #pngStyle;
+        background: url(../img/addPer.png) no-repeat 0;
+    }
+
+    .btnAddPersonOK{
+        #pngStyle;
+        background: url(../img/ok.png) no-repeat 0;
+    }
 }

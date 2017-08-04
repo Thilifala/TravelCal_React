@@ -1,16 +1,17 @@
-@pngbtn-width:35px;
-@pngbtn-height:35px;
 
 .personMngbox{
-    #addPerson{
-        width: @pngbtn-width;
-        height: @pngbtn-height;
-        background: url(../img/addPer.png) no-repeat 0;
+    .personRowBox{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin: 10px 0;
     }
-
-    #addPersonOK{
-        width: @pngbtn-width;
-        height: @pngbtn-height;
-        background: url(../img/addPer.png) no-repeat 0;
-    }
+   .btnDelPer{
+       width: 20px;
+       height: 20px;
+       border: none;
+       background: url(../img/del.png) no-repeat 0;
+       background-size: 20px;
+   }
 }
