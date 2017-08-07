@@ -3,6 +3,7 @@ import React from 'react';
 import '../../css/personManager.less';
 import Title from './title.js';
 import Footer from './footer.js';
+import PopupWin from './popupWin.js';
 
 let PersonRow = React.createClass({
     render:function(){
@@ -29,19 +30,22 @@ let PersonList = React.createClass({
 })
 
 let PersonCopn = React.createClass({
-    getInitialState:function(){
+    getInitialState: function () {
         return {
-            personArr:["PersonA","PersonB"]
+            personArr: ["PersonA", "PersonB"],
+            editPerson: true
         }
     },
-    render:function(){
+    render: function () {
+        let popupWin = this.state.editPerson ? <PopupWin /> : '';
         return (
             <div className="personMngbox">
-                <Title title="人"/>
-                <PersonList person={this.state.personArr}/>
+                <Title title="人" />
+                <PersonList person={this.state.personArr} />
+                {popupWin}
                 <Footer>
-                    <input type="button" className="btnAddPerson"/>
-                    <input type="button" className="btnAddPersonOK"/>
+                    <input type="button" className="btnAddPerson" />
+                    <input type="button" className="btnAddPersonOK" />
                 </Footer>
             </div>
         );
