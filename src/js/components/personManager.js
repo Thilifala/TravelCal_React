@@ -13,7 +13,7 @@ let PopupWin = React.createClass({
         }
     },
     handleEditOk: function () {
-        this.props.onPersonEditOK(this.refs.txtPersonName.value);
+        this.props.onPersonEditOK(this.refs.txtPersonName.value, this.props.editingIndex);
     },
     handleNameChange: function (event) {
         this.setState({
@@ -31,16 +31,16 @@ let PopupWin = React.createClass({
 });
 
 let PersonRow = React.createClass({
-    handllePersonModify: function () {
-        this.props.onPersonModify(this.props.personName);
+    handleRowClick: function () {
+        this.props.onRowClick(this.props.personName, this.props.index);
     },
     handleDel: function () {
-        this.props.onPersonDel(this.props.personName);
+        this.props.onPersonDel(this.props.index);
     },
     render: function () {
         return (
             <div className="personRowBox">
-                <div onClick={this.handllePersonModify}>{this.props.personName}</div>
+                <div onClick={this.handleRowClick}>{this.props.personName}</div>
                 <input type="button" className="btnDelPer" onClick={this.handleDel} />
             </div>
         )
@@ -50,11 +50,11 @@ let PersonRow = React.createClass({
 let PersonList = React.createClass({
     render: function () {
         let personRows = this.props.person.map((name, i) =>
-            <PersonRow personName={name} key={i} {...this.props} />
+            <PersonRow personName={name} key={i} index={i} {...this.props} />
         );
         return (
             <div>
-                {personRows} 
+                {personRows}
             </div>
         )
     }
@@ -62,48 +62,62 @@ let PersonList = React.createClass({
 
 let PersonCopn = React.createClass({
     getInitialState: function () {
+        let personArr = [];
+        fetch('mock/person.json').then(function(resp){
+            if(resp.ok){
+                personArr = resp.json();                
+            }
+        },function(e){
+            console.error("Fetch failed!");
+        })
         return {
             personArr: ["PersonA", "PersonB"],
-            editPerson: false,
-            editingName:''
+            showPopupWin: false,
+            editingName: '',
+            editingIndex:-1,
         }
     },
-    handleAddPersonClick: function (name) {
-        name = typeof name=='string'&&name.constructor==String ?name :'';
+    handleAddPersonClick: function (name,editingIndex) {
+        name = typeof name == 'string' && name.constructor == String ? name : '';
+        editingIndex = isNaN(editingIndex) ? -1 :editingIndex;
         this.setState({
-            editPerson: true,
-            editingName:name||''
+            showPopupWin: true,
+            editingName: name || '',
+            editingIndex:editingIndex
         })
     },
-    handleAddPersonOK: function (name,index) {
+    handlePopWinOK: function (name, index) {
         let personArr = this.state.personArr;
-        name && personArr.push(name);
+        if (name) { 
+            if (index >= 0) {
+                personArr[index] = name;
+            }
+            else {
+                personArr.push(name);
+            }
+        }
         this.setState({
             personArr: personArr,
-            editPerson: false
+            showPopupWin: false
         })
     },
-    handlePersonChangeOK: function () {
-
-    },
-    handlePersonDel:function(name){
+    handlePersonDel: function (index) {
         let personArr = this.state.personArr;
-        let idx = personArr.indexOf(name)
-        personArr.splice(idx,1);
+        personArr.splice(index, 1);
         this.setState({
-            personArr:personArr
+            personArr: personArr
         })
     },
     render: function () {
         let popupWin = <PopupWin personName={this.state.editingName}
-            onPersonEditOK={this.handleAddPersonOK}
-            onPersonChangeOK={this.handlePersonChangeOK}
+            onPersonEditOK={this.handlePopWinOK}
+            editingIndex={this.state.editingIndex}
         />;
         return (
             <div className="personMngbox">
                 <Title title="人" />
-                <PersonList person={this.state.personArr} onPersonModify={this.handleAddPersonClick} onPersonDel={this.handlePersonDel}/>
-                {this.state.editPerson ? popupWin : ''}
+                <PersonList person={this.state.personArr} onRowClick={this.handleAddPersonClick} onPersonDel={this.handlePersonDel} />
+                {this.state.showPopupWin ? popupWin : ''}
                 <Footer>
                     <input type="button" className="btnAddPerson" onClick={this.handleAddPersonClick} />
                     <input type="button" className="btnAddPersonOK" />
