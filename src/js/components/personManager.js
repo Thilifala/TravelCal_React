@@ -62,20 +62,26 @@ let PersonList = React.createClass({
 
 let PersonCopn = React.createClass({
     getInitialState: function () {
-        let personArr = [];
-        fetch('mock/person.json').then(function(resp){
-            if(resp.ok){
-                personArr = resp.json();                
-            }
-        },function(e){
-            console.error("Fetch failed!");
-        })
         return {
-            personArr: ["PersonA", "PersonB"],
+            personArr: [],
             showPopupWin: false,
             editingName: '',
             editingIndex:-1,
         }
+    },
+    componentDidMount:function(){
+         fetch('mock/person.json').then(function(resp){
+            if(resp.ok){
+                return resp.json();
+             }
+         }).then(function (data) {
+             let personArr = data;
+            //  this.setState({
+            //      personArr: personArr
+            //  })
+         }).catch(function(err){
+             console.error('fetch error:'+err.message);
+         });
     },
     handleAddPersonClick: function (name,editingIndex) {
         name = typeof name == 'string' && name.constructor == String ? name : '';
