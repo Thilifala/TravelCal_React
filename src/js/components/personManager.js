@@ -66,35 +66,36 @@ let PersonCopn = React.createClass({
             personArr: [],
             showPopupWin: false,
             editingName: '',
-            editingIndex:-1,
+            editingIndex: -1,
         }
     },
-    componentDidMount:function(){
-         fetch('mock/person.json').then(function(resp){
-            if(resp.ok){
+    componentDidMount: function () {
+        let copn = this;
+        fetch('mock/person.json').then(function (resp) {
+            if (resp.ok) {
                 return resp.json();
-             }
-         }).then(function (data) {
-             let personArr = data;
-            //  this.setState({
-            //      personArr: personArr
-            //  })
-         }).catch(function(err){
-             console.error('fetch error:'+err.message);
-         });
+            }
+        }).then(function (data) {
+            let personArr = data || [];
+            copn.setState({
+                personArr: personArr
+            })
+        }).catch(function (err) {
+            console.error('fetch error:' + err.message);
+        });
     },
-    handleAddPersonClick: function (name,editingIndex) {
+    handleAddPersonClick: function (name, editingIndex) {
         name = typeof name == 'string' && name.constructor == String ? name : '';
-        editingIndex = isNaN(editingIndex) ? -1 :editingIndex;
+        editingIndex = isNaN(editingIndex) ? -1 : editingIndex;
         this.setState({
             showPopupWin: true,
             editingName: name || '',
-            editingIndex:editingIndex
+            editingIndex: editingIndex
         })
     },
     handlePopWinOK: function (name, index) {
         let personArr = this.state.personArr;
-        if (name) { 
+        if (name) {
             if (index >= 0) {
                 personArr[index] = name;
             }
