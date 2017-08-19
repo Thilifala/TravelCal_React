@@ -2,8 +2,8 @@
 import React from 'react';
 import '../../css/personManager.less';
 import '../../css/popupWin.less';
-import Title from './title.js';
-import Footer from './footer.js';
+import Title from './title.jsx';
+import Footer from './footer.jsx';
 
 //弹窗
 let PopupWin = React.createClass({
@@ -22,7 +22,7 @@ let PopupWin = React.createClass({
     },
     render: function () {
         return (
-            <div className="popupWinStyle">
+            <div className="popupWin flexStyle">
                 <input ref="txtPersonName" type="text" value={this.state.personName} onChange={this.handleNameChange} />
                 <input type="button" value="OK" onClick={this.handleEditOk} />
             </div>

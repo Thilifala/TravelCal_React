@@ -1,17 +1,25 @@
 // 消费管理
 import React from 'react';
-import Title from './title.js';
-import Footer from './footer.js';
+import Title from './title.jsx';
+import Footer from './footer.jsx';
 import '../../css/popupWin.less';
 
 let ItemWin = React.createClass({
     render: function () {
         return (
-            <div className="popupWinStyle">
-                <label>XXXX</label><input ref="txtItemName" type="text" onChange={this.handleNameChange} />
-                <label>XXXX</label><input ref="txtCost" type="text" onChange={this.handleNameChange} />
-                <label>XXXX</label><input ref="txtPaid" type="text" onChange={this.handleNameChange} />
-                <label>XXXX</label><input ref="txtPaidFor" type="text" onChange={this.handleNameChange} />
+            <div className="popupWin style2">
+                <div>
+                    <label>项目</label><input ref="txtItemName" type="text" onChange={this.handleNameChange} />
+                </div>
+                <div>
+                    <label>花费</label><input ref="txtCost" type="text" onChange={this.handleNameChange} />
+                </div>
+                <div>
+                    <label>付钱人</label><input ref="txtPaid" type="text" onChange={this.handleNameChange} />
+                </div>
+                <div>
+                    <label>蹭钱的</label><input ref="txtPaidFor" type="text" onChange={this.handleNameChange} />
+                </div>
                 <input type="button" value="OK" onClick={this.handleEditOk} />
             </div>
         )
@@ -43,7 +51,7 @@ let ConsumCopn = React.createClass({
         return (
             <div>
                 <Title title="消费" />
-                <ItemWin/>
+                <ItemWin />
                 <Footer>
                     <input type="button" className="btnAddItem" onClick={this.handleAddItem} />
                     <input type="button" className="btnDoCalc" onClick={this.handleDoCalc} />
