@@ -12,20 +12,15 @@ let ConsumeItem = function (name, cost, paid, padiFor) {
     this.padiFor = padiFor || [];
 }
 
-//项目弹窗组件
-let ItemWin = React.createClass({
+//项目表单组件
+let ItemForm = React.createClass({
     propTypes: {
-        consumeItem: React.PropTypes.instanceOf(ConsumeItem).isRequired,
-        personArr:React.PropTypes.array.isRequired
+        consumeItem: React.PropTypes.instanceOf(ConsumeItem).isRequired
     },
     getInitialState: function () {
         return {
             consumeItem: this.props.consumeItem
         }
-    },
-    // OK
-    handleEditOk: function () {
-        this.props.onEditItemOK(this.state.editingItem);
     },
     //项目
     handleNameChange: function (e) {
@@ -37,59 +32,108 @@ let ItemWin = React.createClass({
     },
     //花费
     handleCostChange: function (e) {
-
+        let item = this.state.consumeItem;
+        item.cost = this.refs.txtCost.value;
+        this.setState({
+            consumeItem: item
+        })
     },
-    // 付钱人
-    handlePaidClick: function (e) {
-        console.log(this.props.personArr);
+     // 付钱人
+     handlePaidClick: function (e) {
+        this.props.onPersonCtlTab();
     },
     // 蹭钱人
     handlePaidForClick: function (e) {
-
+        this.props.onPersonCtlTab();
     },
-    render: function () {
+    // OK
+    handleEditOk: function () {
+        this.props.onEditItemOK(this.state.editingItem);
+    },
+    render:function(){
         return (
-            <div className="popupWin style2">
-                <div className="itemForm">
-                    <div>
-                        <label>项目</label><input ref="txtItemName" type="text" value={this.state.consumeItem.name} onChange={this.handleNameChange} />
-                    </div>
-                    <div>
-                        <label>花费</label><input ref="txtCost" type="text" value={this.state.consumeItem.cost} onChange={this.handleCostChange} />
-                    </div>
-                    <div>
-                        <label>付钱人</label><div className="txtDiv txtPaid" onClick={this.handlePaidClick}>{this.state.consumeItem.paid}</div>
-                    </div>
-                    <div>
-                        <label>蹭钱的</label><div className="txtDiv txtPaidFor" onClick={this.handlePaidForClick}>{this.state.consumeItem.padiFor.join(',')}</div>
-                    </div>
-                    <input type="button" value="OK" onClick={this.handleEditOk} />
+            <div className="itemForm">
+                <div>
+                    <label>项目</label><input ref="txtItemName" type="text" value={this.state.consumeItem.name} onChange={this.handleNameChange} />
                 </div>
-                <PersonSelector personArr={this.props.personArr} isMutiSelect={false} ></PersonSelector>
+                <div>
+                    <label>花费</label><input ref="txtCost" type="text" value={this.state.consumeItem.cost} onChange={this.handleCostChange} />
+                </div>
+                <div>
+                    <label>付钱人</label><div className="txtDiv txtPaid" onClick={this.handlePaidClick}>{this.state.consumeItem.paid}</div>
+                </div>
+                <div>
+                    <label>蹭钱的</label><div className="txtDiv txtPaidFor" onClick={this.handlePaidForClick}>{this.state.consumeItem.padiFor.join(',')}</div>
+                </div>
+                <input type="button" value="OK" onClick={this.handleEditOk} />
             </div>
         )
     }
-});
+})
 
-//  人 选择器组件
+//  人选择器组件
 let PersonSelector = React.createClass({
     propTypes:{
         personArr:React.PropTypes.array.isRequired,
         isMutiSelect:React.PropTypes.bool.isRequired
     },
+    handlePerRowClick:function(e){
+        this.props.onPersonSelectOK(e.target.innerText);
+    },
     render:function(){
         let personRow = this.props.personArr.map((name,i)=>{
             return (
-                <div key={i}>{name}</div>
+                <div key={i} onClick={this.handlePerRowClick}>{name}</div>
             )
-        })
+        });
         return (
             <div className="personSelector">
                 {personRow}
+                <div>OK</div>
+                <div className="selectOK">OK</div>
             </div>
         );
     }
 })
+
+//弹窗组件
+let ItemWin = React.createClass({
+    propTypes: {
+        consumeItem: React.PropTypes.instanceOf(ConsumeItem).isRequired,
+        personArr:React.PropTypes.array.isRequired
+    },
+    getInitialState: function () {
+        return {
+            consumeItem: this.props.consumeItem,
+            isSelectingPer:false
+        }
+    },
+    handlePersonCtlTab:function(){
+        this.setState({
+            isSelectingPer:true
+        })
+    },
+    handlePersonSelectOK:function(name){
+        var consumeItem = this.state.consumeItem;
+        consumeItem.paid = name;
+        this.setState({
+            isSelectingPer:false,
+            consumeItem:consumeItem
+        })
+    },
+    render: function () {
+        return (
+            <div className="popupWin style2">
+                <ItemForm
+                    onEditItemOK={this.props.onEditItemOK}
+                    onPersonCtlTab={this.handlePersonCtlTab}
+                    consumeItem={this.props.consumeItem}
+                />
+                {this.state.isSelectingPer?<PersonSelector personArr={this.props.personArr} isMutiSelect={false} onPersonSelectOK={this.handlePersonSelectOK}/>:''}
+            </div>
+        )
+    }
+});
 
 //顶层组件
 let ConsumCopn = React.createClass({
