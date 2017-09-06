@@ -40,11 +40,11 @@ let ItemForm = React.createClass({
     },
      // 付钱人
      handlePaidClick: function (e) {
-        this.props.onPersonCtlTab();
+        this.props.onPersonCtlTab(false);
     },
     // 蹭钱人
     handlePaidForClick: function (e) {
-        this.props.onPersonCtlTab();
+        this.props.onPersonCtlTab(true);
     },
     // OK
     handleEditOk: function () {
@@ -73,24 +73,29 @@ let ItemForm = React.createClass({
 
 //  人选择器组件
 let PersonSelector = React.createClass({
-    propTypes:{
-        personArr:React.PropTypes.array.isRequired,
-        isMutiSelect:React.PropTypes.bool.isRequired
+    propTypes: {
+        personArr: React.PropTypes.array.isRequired,
+        isMutiSelect: React.PropTypes.bool.isRequired
     },
-    handlePerRowClick:function(e){
-        this.props.onPersonSelectOK(e.target.innerText);
+    handlePerRowClick: function (e) {
+        !this.props.isMutiSelect && this.props.onPersonSelectOK(e.target.innerText);
+        e.target.className = "per-selected";
     },
-    render:function(){
-        let personRow = this.props.personArr.map((name,i)=>{
+    handleSelectOKClick:function(e){
+
+    },
+    render: function () {
+        let personRow = this.props.personArr.map((name, i) => {
             return (
                 <div key={i} onClick={this.handlePerRowClick}>{name}</div>
             )
         });
+        let el_selectOK = this.props.isMutiSelect ? <div className="selectOK" onClick={this.handleSelectOKClick}>OK</div> : '';
         return (
             <div className="personSelector">
                 {personRow}
-                <div>OK</div>
-                <div className="selectOK">OK</div>
+                <div></div>
+                {el_selectOK}
             </div>
         );
     }
@@ -105,12 +110,14 @@ let ItemWin = React.createClass({
     getInitialState: function () {
         return {
             consumeItem: this.props.consumeItem,
-            isSelectingPer:false
+            isSelectingPer:false,
+            isMutiSelect:false
         }
     },
-    handlePersonCtlTab:function(){
+    handlePersonCtlTab:function(isMutiSelect){
         this.setState({
-            isSelectingPer:true
+            isSelectingPer:true,
+            isMutiSelect:isMutiSelect
         })
     },
     handlePersonSelectOK:function(name){
@@ -129,7 +136,7 @@ let ItemWin = React.createClass({
                     onPersonCtlTab={this.handlePersonCtlTab}
                     consumeItem={this.props.consumeItem}
                 />
-                {this.state.isSelectingPer?<PersonSelector personArr={this.props.personArr} isMutiSelect={false} onPersonSelectOK={this.handlePersonSelectOK}/>:''}
+                {this.state.isSelectingPer?<PersonSelector personArr={this.props.personArr} isMutiSelect={this.state.isMutiSelect} onPersonSelectOK={this.handlePersonSelectOK}/>:''}
             </div>
         )
     }
