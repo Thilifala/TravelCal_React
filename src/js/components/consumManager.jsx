@@ -5,11 +5,11 @@ import Footer from './footer.jsx';
 import '../../css/popupWin.less';
 import '../../css/consumManager.less';
 
-let ConsumeItem = function (name, cost, paid, padiFor) {
+let ConsumeItem = function (name, cost, paid, paidFor) {
     this.name = name || '';
     this.cost = cost || 0;
     this.paid = paid || '';
-    this.padiFor = padiFor || [];
+    this.paidFor = paidFor || [];
 }
 
 //项目表单组件
@@ -63,7 +63,7 @@ let ItemForm = React.createClass({
                     <label>付钱人</label><div className="txtDiv txtPaid" onClick={this.handlePaidClick}>{this.state.consumeItem.paid}</div>
                 </div>
                 <div>
-                    <label>蹭钱的</label><div className="txtDiv txtPaidFor" onClick={this.handlePaidForClick}>{this.state.consumeItem.padiFor.join(',')}</div>
+                    <label>蹭钱的</label><div className="txtDiv txtPaidFor" onClick={this.handlePaidForClick}>{this.state.consumeItem.paidFor.join(',')}</div>
                 </div>
                 <input type="button" value="OK" onClick={this.handleEditOk} />
             </div>
@@ -77,17 +77,38 @@ let PersonSelector = React.createClass({
         personArr: React.PropTypes.array.isRequired,
         isMutiSelect: React.PropTypes.bool.isRequired
     },
-    handlePerRowClick: function (e) {
-        !this.props.isMutiSelect && this.props.onPersonSelectOK(e.target.innerText);
-        e.target.className = "per-selected";
+    getInitialState: function () {
+        return {
+            selectedPer: this.props.selectedPer || []
+        }
     },
-    handleSelectOKClick:function(e){
-
+    handlePerRowClick: function (e) {
+        let name = e.target.innerText;
+        if(!this.props.isMutiSelect){
+            this.props.onPersonSelectOK(name);
+        }
+        else{
+            let selectedPer = this.state.selectedPer;
+            let idx = this.state.selectedPer.indexOf(name);
+            if (idx < 0) {
+                selectedPer.push(name);
+            }
+            else {
+                selectedPer.splice(idx, 1);
+            }
+            this.setState({
+                selectedPer: selectedPer
+            })
+        }
+    },
+    handleSelectOKClick: function (e) {
+        this.props.onPerMutiSelectOK(this.state.selectedPer);
     },
     render: function () {
         let personRow = this.props.personArr.map((name, i) => {
+            let className = this.state.selectedPer.indexOf(name) < 0 ? "" : "per-selected";
             return (
-                <div key={i} onClick={this.handlePerRowClick}>{name}</div>
+                <div key={i} onClick={this.handlePerRowClick} className={className}>{name}</div>
             )
         });
         let el_selectOK = this.props.isMutiSelect ? <div className="selectOK" onClick={this.handleSelectOKClick}>OK</div> : '';
@@ -120,8 +141,16 @@ let ItemWin = React.createClass({
             isMutiSelect:isMutiSelect
         })
     },
+    handlePerMutiSelectOK:function(nameArr){
+        let consumeItem = this.state.consumeItem;
+        consumeItem.paidFor = nameArr;
+        this.setState({
+            isSelectingPer:false,
+            consumeItem:consumeItem
+        })
+    },
     handlePersonSelectOK:function(name){
-        var consumeItem = this.state.consumeItem;
+        let consumeItem = this.state.consumeItem;
         consumeItem.paid = name;
         this.setState({
             isSelectingPer:false,
@@ -136,7 +165,17 @@ let ItemWin = React.createClass({
                     onPersonCtlTab={this.handlePersonCtlTab}
                     consumeItem={this.props.consumeItem}
                 />
-                {this.state.isSelectingPer?<PersonSelector personArr={this.props.personArr} isMutiSelect={this.state.isMutiSelect} onPersonSelectOK={this.handlePersonSelectOK}/>:''}
+                {
+                    this.state.isSelectingPer ?
+                        <PersonSelector
+                            personArr={this.props.personArr}
+                            selectedPer={this.state.consumeItem.paidFor}
+                            isMutiSelect={this.state.isMutiSelect}
+                            onPersonSelectOK={this.handlePersonSelectOK}
+                            onPerMutiSelectOK={this.handlePerMutiSelectOK}
+                        />
+                        : ''
+                }
             </div>
         )
     }
@@ -148,7 +187,8 @@ let ConsumCopn = React.createClass({
         return {
             isEditing: false,
             editingItem: {},
-            personArr: []
+            personArr: [],
+            consumeItem:[]
         }
     },
     componentDidMount: function () {
