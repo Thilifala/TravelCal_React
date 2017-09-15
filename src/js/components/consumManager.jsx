@@ -169,7 +169,7 @@ let ItemWin = React.createClass({
                     this.state.isSelectingPer ?
                         <PersonSelector
                             personArr={this.props.personArr}
-                            selectedPer={this.state.consumeItem.paidFor}
+                            selectedPer={this.state.isMutiSelect ? this.state.consumeItem.paidFor : this.state.consumeItem.paid}
                             isMutiSelect={this.state.isMutiSelect}
                             onPersonSelectOK={this.handlePersonSelectOK}
                             onPerMutiSelectOK={this.handlePerMutiSelectOK}
@@ -181,6 +181,20 @@ let ItemWin = React.createClass({
     }
 });
 
+
+let ItemTable = React.createClass({
+    propTypes:{
+        consumeItems:React.propTypes.array.isRequired
+    },
+    render:function(){
+        return (
+            <div>
+                
+            </div>
+        )
+    }
+})
+
 //顶层组件
 let ConsumCopn = React.createClass({
     getInitialState: function () {
@@ -188,7 +202,7 @@ let ConsumCopn = React.createClass({
             isEditing: false,
             editingItem: {},
             personArr: [],
-            consumeItem:[]
+            consumeItems:[]
         }
     },
     componentDidMount: function () {
@@ -215,9 +229,11 @@ let ConsumCopn = React.createClass({
         })
     },
     //添加OK
-    handleEditItemOK: function () {
+    handleEditItemOK: function (item) {
+        let items = this.state.consumeItems.push(item);
         this.setState({
-            isEditing: false
+            isEditing: false,
+            consumeItems:items
         })
     },
     //计算
@@ -232,6 +248,7 @@ let ConsumCopn = React.createClass({
         return (
             <div className="consumeMngbox">
                 <Title title="消费" />
+                <ItemTable consumeItems={this.state.consumeItems}/>
                 {this.state.isEditing ? <ItemWin onEditItemOK={this.handleEditItemOK} consumeItem={this.state.editingItem} personArr={this.state.personArr}/> : ''}
                 <Footer>
                     <input type="button" className="btnAddItem" onClick={this.handleAddItemClick} />
