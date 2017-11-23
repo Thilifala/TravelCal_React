@@ -38,8 +38,8 @@ let ItemForm = React.createClass({
             consumeItem: item
         })
     },
-     // 付钱人
-     handlePaidClick: function (e) {
+    // 付钱人
+    handlePaidClick: function (e) {
         this.props.onPersonCtlTab(false);
     },
     // 蹭钱人
@@ -50,7 +50,7 @@ let ItemForm = React.createClass({
     handleEditOk: function () {
         this.props.onEditItemOK(this.state.editingItem);
     },
-    render:function(){
+    render: function () {
         return (
             <div className="itemForm">
                 <div>
@@ -84,10 +84,10 @@ let PersonSelector = React.createClass({
     },
     handlePerRowClick: function (e) {
         let name = e.target.innerText;
-        if(!this.props.isMutiSelect){
+        if (!this.props.isMutiSelect) {
             this.props.onPersonSelectOK(name);
         }
-        else{
+        else {
             let selectedPer = this.state.selectedPer;
             let idx = this.state.selectedPer.indexOf(name);
             if (idx < 0) {
@@ -126,35 +126,35 @@ let PersonSelector = React.createClass({
 let ItemWin = React.createClass({
     propTypes: {
         consumeItem: React.PropTypes.instanceOf(ConsumeItem).isRequired,
-        personArr:React.PropTypes.array.isRequired
+        personArr: React.PropTypes.array.isRequired
     },
     getInitialState: function () {
         return {
             consumeItem: this.props.consumeItem,
-            isSelectingPer:false,
-            isMutiSelect:false
+            isSelectingPer: false,
+            isMutiSelect: false
         }
     },
-    handlePersonCtlTab:function(isMutiSelect){
+    handlePersonCtlTab: function (isMutiSelect) {
         this.setState({
-            isSelectingPer:true,
-            isMutiSelect:isMutiSelect
+            isSelectingPer: true,
+            isMutiSelect: isMutiSelect
         })
     },
-    handlePerMutiSelectOK:function(nameArr){
+    handlePerMutiSelectOK: function (nameArr) {
         let consumeItem = this.state.consumeItem;
         consumeItem.paidFor = nameArr;
         this.setState({
-            isSelectingPer:false,
-            consumeItem:consumeItem
+            isSelectingPer: false,
+            consumeItem: consumeItem
         })
     },
-    handlePersonSelectOK:function(name){
+    handlePersonSelectOK: function (name) {
         let consumeItem = this.state.consumeItem;
         consumeItem.paid = name;
         this.setState({
-            isSelectingPer:false,
-            consumeItem:consumeItem
+            isSelectingPer: false,
+            consumeItem: consumeItem
         })
     },
     render: function () {
@@ -182,42 +182,57 @@ let ItemWin = React.createClass({
 });
 
 
-let ItemTable = React.createClass({
-    propTypes:{
-        consumeItems:React.propTypes.array.isRequired
-    },
-    render:function(){
+class RowForItem extends React.Component{
+    render(){
         return (
             <div>
-                
+                aaaa
             </div>
         )
     }
-})
+}
 
-//顶层组件
+class ItemTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+    }
+
+    render() {
+        return (
+            <div className="ItemTable">
+                <RowForItem/>
+                <RowForItem/>
+            </div>
+        )
+    }
+}
+
+//顶层容器
 let ConsumCopn = React.createClass({
     getInitialState: function () {
         return {
             isEditing: false,
             editingItem: {},
             personArr: [],
-            consumeItems:[]
+            consumeItems: []
         }
     },
     componentDidMount: function () {
         //TODO:fetch PersonArr
         let copn = this;
-        fetch('mock/person.json').then(function(resp){
-            if(resp.ok){
+        fetch('mock/person.json').then(function (resp) {
+            if (resp.ok) {
                 return resp.json();
             }
-        }).then(function(data){
+        }).then(function (data) {
             let personArr = data || [];
             copn.setState({
-                personArr:personArr
+                personArr: personArr
             })
-        }).catch(function(err){
+        }).catch(function (err) {
             console.error('fetch error:' + err.message);
         })
     },
@@ -233,7 +248,7 @@ let ConsumCopn = React.createClass({
         let items = this.state.consumeItems.push(item);
         this.setState({
             isEditing: false,
-            consumeItems:items
+            consumeItems: items
         })
     },
     //计算
@@ -248,8 +263,8 @@ let ConsumCopn = React.createClass({
         return (
             <div className="consumeMngbox">
                 <Title title="消费" />
-                <ItemTable consumeItems={this.state.consumeItems}/>
-                {this.state.isEditing ? <ItemWin onEditItemOK={this.handleEditItemOK} consumeItem={this.state.editingItem} personArr={this.state.personArr}/> : ''}
+                <ItemTable consumeItems={this.state.consumeItems} />
+                {this.state.isEditing ? <ItemWin onEditItemOK={this.handleEditItemOK} consumeItem={this.state.editingItem} personArr={this.state.personArr} /> : ''}
                 <Footer>
                     <input type="button" className="btnAddItem" onClick={this.handleAddItemClick} />
                     <input type="button" className="btnDoCalc" onClick={this.handleDoCalc} />
