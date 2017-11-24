@@ -185,8 +185,11 @@ let ItemWin = React.createClass({
 class RowForItem extends React.Component{
     render(){
         return (
-            <div>
-                aaaa
+            <div className="trow">
+                <div>aaa</div>
+                <div>bbb</div>
+                <div>ccc</div>
+                <div>ddd</div>
             </div>
         )
     }
@@ -202,9 +205,15 @@ class ItemTable extends React.Component {
 
     render() {
         return (
-            <div className="ItemTable">
-                <RowForItem/>
-                <RowForItem/>
+            <div className="itemtable">
+                <div className="thead">
+                    <div>项目名</div>
+                    <div>消费</div>
+                    <div>付钱人</div>
+                    <div>没付钱人</div>
+                </div>
+                <RowForItem />
+                <RowForItem />
             </div>
         )
     }
@@ -261,16 +270,19 @@ let ConsumCopn = React.createClass({
     },
     render: function () {
         return (
-            <div className="consumeMngbox">
-                <Title title="消费" />
-                <ItemTable consumeItems={this.state.consumeItems} />
+            <div>
                 {this.state.isEditing ? <ItemWin onEditItemOK={this.handleEditItemOK} consumeItem={this.state.editingItem} personArr={this.state.personArr} /> : ''}
-                <Footer>
-                    <input type="button" className="btnAddItem" onClick={this.handleAddItemClick} />
-                    <input type="button" className="btnDoCalc" onClick={this.handleDoCalc} />
-                    <input type="button" className="btnBack" onClick={this.handleBack} />
-                </Footer>
+                <div className="consumeMngbox">
+                    <Title title="消费" />
+                    <ItemTable consumeItems={this.state.consumeItems} />
+                    <Footer>
+                        <input type="button" className="btnAddItem" onClick={this.handleAddItemClick} />
+                        <input type="button" className="btnDoCalc" onClick={this.handleDoCalc} />
+                        <input type="button" className="btnBack" onClick={this.handleBack} />
+                    </Footer>
+                </div>
             </div>
+
         )
     }
 });

@@ -1,4 +1,14 @@
+#trow{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+    height: 2rem;
+    border-bottom:1px solid blueviolet; 
+}
+
 .consumeMngbox{
+    // 语法：嵌套
     .personSelector{
         width: 100%;
         height: 12rem;
@@ -21,6 +31,16 @@
         }
         .per-selected{
             color: yellow;
+        }
+    }
+    .itemtable{
+        .thead{
+            // 语法：mixin
+            #trow;
+            font-weight:bold;
+        }
+        .trow{
+            #trow;
         }
     }
 }
