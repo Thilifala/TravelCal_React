@@ -8,31 +8,6 @@
 }
 
 .consumeMngbox{
-    // 语法：嵌套
-    .personSelector{
-        width: 100%;
-        height: 12rem;
-        overflow: auto;
-        margin: 0;
-        position: fixed;
-        bottom: 0;
-        background-color: rgb(185,185,185);
-        div{
-            height: 2rem;
-            line-height: 2rem;
-            text-align: center;
-            font-size: 1.5rem;
-        }
-        .selectOK{
-            position: fixed;
-            bottom: 0;
-            width:100%;
-            background-color: rebeccapurple;
-        }
-        .per-selected{
-            color: yellow;
-        }
-    }
     .itemtable{
         .thead{
             // 语法：mixin
@@ -42,5 +17,31 @@
         .trow{
             #trow;
         }
+    }
+}
+
+// 语法：嵌套
+.personSelector{
+    width: 100%;
+    height: 12rem;
+    overflow: auto;
+    margin: 0;
+    position: fixed;
+    bottom: 0;
+    background-color: rgb(185,185,185);
+    div{
+        height: 2rem;
+        line-height: 2rem;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+    .selectOK{
+        position: fixed;
+        bottom: 0;
+        width:100%;
+        background-color: rebeccapurple;
+    }
+    .per-selected{
+        color: yellow;
     }
 }

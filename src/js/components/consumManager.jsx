@@ -269,10 +269,16 @@ let ConsumCopn = React.createClass({
 
     },
     render: function () {
+        let consumeStyle = '';
+        let itemwin = '';
+        if(this.state.isEditing){
+            itemwin = <ItemWin onEditItemOK={this.handleEditItemOK} consumeItem={this.state.editingItem} personArr={this.state.personArr} />;
+            consumeStyle = 'blur(3px)'
+        }
         return (
             <div>
-                {this.state.isEditing ? <ItemWin onEditItemOK={this.handleEditItemOK} consumeItem={this.state.editingItem} personArr={this.state.personArr} /> : ''}
-                <div className="consumeMngbox">
+                {itemwin}
+                <div className="consumeMngbox" style={{filter:consumeStyle}}>
                     <Title title="消费" />
                     <ItemTable consumeItems={this.state.consumeItems} />
                     <Footer>
