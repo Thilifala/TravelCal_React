@@ -5,14 +5,16 @@ import Footer from './footer.jsx';
 import '../../css/popupWin.less';
 import '../../css/consumManager.less';
 
-let ConsumeItem = function (name, cost, paid, paidFor) {
+//类——消费项
+let ConsumeItem = function (id, name, cost, paid, paidFor) {
+    this.id = id || 0;
     this.name = name || '';
     this.cost = cost || 0;
     this.paid = paid || '';
     this.paidFor = paidFor || [];
 }
 
-//项目表单组件
+//项目表单
 let ItemForm = React.createClass({
     propTypes: {
         consumeItem: React.PropTypes.instanceOf(ConsumeItem).isRequired
@@ -48,7 +50,7 @@ let ItemForm = React.createClass({
     },
     // OK
     handleEditOk: function () {
-        this.props.onEditItemOK(this.state.editingItem);
+        this.props.onEditItemOK(this.state.consumeItem);
     },
     render: function () {
         return (
@@ -71,7 +73,7 @@ let ItemForm = React.createClass({
     }
 })
 
-//  人选择器组件
+//人选择器
 let PersonSelector = React.createClass({
     propTypes: {
         personArr: React.PropTypes.array.isRequired,
@@ -122,8 +124,8 @@ let PersonSelector = React.createClass({
     }
 })
 
-//弹窗组件
-let ItemWin = React.createClass({
+//模态窗
+let ModalWin = React.createClass({
     propTypes: {
         consumeItem: React.PropTypes.instanceOf(ConsumeItem).isRequired,
         personArr: React.PropTypes.array.isRequired
@@ -181,39 +183,81 @@ let ItemWin = React.createClass({
     }
 });
 
+//项目表格——行
+class RowForItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleRowClick = this.handleRowClick.bind(this);
+        this.handlerTouchStart = this.handlerTouchStart.bind(this);
+        this.handlerTouchMove = this.handlerTouchMove.bind(this);
+        this.handlerTouchEnd = this.handlerTouchEnd.bind(this);
+        this.handlerTouchCancel = this.handlerTouchCancel.bind(this);
+        
+        this.timeoutEvent = 0;
+    }
 
-class RowForItem extends React.Component{
-    render(){
+    handleRowClick() {
+        this.props.onRowClick(this.props.consumeItem);
+    }
+
+    longPress() {
+        console.log('longPress:' + this.props.consumeItem.id);
+    }
+  
+    handlerTouchStart() {
+        this.timeoutEvent = setTimeout(() => {
+            this.longPress();
+        }, 750);
+    }
+    handlerTouchMove(){
+        clearTimeout(this.timeoutEvent);
+        this.timeoutEvent = 0 ;
+    }
+    handlerTouchEnd(){
+        clearTimeout(this.timeoutEvent);
+    }
+    handlerTouchCancel(){
+        clearTimeout(this.timeoutEvent);
+    }
+
+    render() {
+        let consume = this.props.consumeItem;
         return (
-            <div className="trow">
-                <div>aaa</div>
-                <div>bbb</div>
-                <div>ccc</div>
-                <div>ddd</div>
+            <div className="trow"
+                onClick={this.handleRowClick}
+                onTouchStart={this.handlerTouchStart}
+                onTouchMove={this.handlerTouchMove}
+                onTouchEnd={this.handlerTouchEnd}
+                onTouchCancel={this.handlerTouchCancel}>
+                <div>{consume.name}</div>
+                <div>{consume.cost}</div>
+                <div>{consume.paid}</div>
+                <div>{consume.paidFor.join(',')}</div>
             </div>
         )
     }
 }
 
+//项目表格
 class ItemTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        }
+        this.state = {};
     }
 
     render() {
+        let rowItems = this.props.consumeItems.map(function(item,index){
+            return <RowForItem consumeItem={item} key={index} onRowClick={this.props.onRowClick}/>;
+        }.bind(this));
         return (
             <div className="itemtable">
                 <div className="thead">
                     <div>项目名</div>
                     <div>消费</div>
                     <div>付钱人</div>
-                    <div>没付钱人</div>
+                    <div>蹭钱人</div>
                 </div>
-                <RowForItem />
-                <RowForItem />
+                {rowItems}
             </div>
         )
     }
@@ -224,11 +268,12 @@ let ConsumCopn = React.createClass({
     getInitialState: function () {
         return {
             isEditing: false,
-            editingItem: {},
+            editingItemId: -1,
             personArr: [],
             consumeItems: []
         }
     },
+
     componentDidMount: function () {
         //TODO:fetch PersonArr
         let copn = this;
@@ -245,20 +290,44 @@ let ConsumCopn = React.createClass({
             console.error('fetch error:' + err.message);
         })
     },
+
+    handleRowClick:function(item){
+        console.log('handleRowClick:'+ item.id);
+        this.setState({
+            isEditing: true,
+            editingItemId: item.id
+        })
+    },
+
     //点击添加项目
     handleAddItemClick: function () {
         this.setState({
             isEditing: true,
-            editingItem: new ConsumeItem()
+            editingItemId: this.state.consumeItems.length
         })
     },
+
     //添加OK
     handleEditItemOK: function (item) {
-        let items = this.state.consumeItems.push(item);
-        this.setState({
-            isEditing: false,
-            consumeItems: items
+        let items = this.state.consumeItems;
+        //当前项
+        let currIndex = items.findIndex(function(e){
+            return e.id == item.id;
         })
+        if (currIndex < 0) {
+            items.push(item);
+            this.setState({
+                isEditing: false,
+                consumeItems: items
+            })
+        }
+        else{
+            items.splice(currIndex,1,item);
+            this.setState({
+                isEditing: false,
+            })
+        }
+       
     },
     //计算
     handleDoCalc: function () {
@@ -268,19 +337,22 @@ let ConsumCopn = React.createClass({
     handleBack: function () {
 
     },
+
     render: function () {
         let consumeStyle = '';
-        let itemwin = '';
-        if(this.state.isEditing){
-            itemwin = <ItemWin onEditItemOK={this.handleEditItemOK} consumeItem={this.state.editingItem} personArr={this.state.personArr} />;
-            consumeStyle = 'blur(3px)'
+        let modalWin = '';
+        let editingId = this.state.editingItemId;
+        let currItems = this.state.consumeItems;
+        let editingItem = editingId == currItems.length ? new ConsumeItem(editingId) : currItems[editingId];
+        if (this.state.isEditing) {
+            modalWin = <ModalWin onEditItemOK={this.handleEditItemOK} consumeItem={editingItem} personArr={this.state.personArr} />;
         }
         return (
             <div>
-                {itemwin}
-                <div className="consumeMngbox" style={{filter:consumeStyle}}>
+                {modalWin}
+                <div className="consumeMngbox">
                     <Title title="消费" />
-                    <ItemTable consumeItems={this.state.consumeItems} />
+                    <ItemTable consumeItems={this.state.consumeItems} onRowClick={this.handleRowClick} />
                     <Footer>
                         <input type="button" className="btnAddItem" onClick={this.handleAddItemClick} />
                         <input type="button" className="btnDoCalc" onClick={this.handleDoCalc} />
