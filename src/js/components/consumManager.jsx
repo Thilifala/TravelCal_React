@@ -202,6 +202,9 @@ class RowForItem extends React.Component {
 
     longPress() {
         console.log('longPress:' + this.props.consumeItem.id);
+        if(confirm('确定删除？')){
+            this.props.onDeleItem(this.props.consumeItem);
+        }
     }
   
     handlerTouchStart() {
@@ -209,13 +212,16 @@ class RowForItem extends React.Component {
             this.longPress();
         }, 750);
     }
+
     handlerTouchMove(){
         clearTimeout(this.timeoutEvent);
         this.timeoutEvent = 0 ;
     }
+
     handlerTouchEnd(){
         clearTimeout(this.timeoutEvent);
     }
+
     handlerTouchCancel(){
         clearTimeout(this.timeoutEvent);
     }
@@ -247,7 +253,7 @@ class ItemTable extends React.Component {
 
     render() {
         let rowItems = this.props.consumeItems.map(function(item,index){
-            return <RowForItem consumeItem={item} key={index} onRowClick={this.props.onRowClick}/>;
+            return <RowForItem consumeItem={item} key={index} onRowClick={this.props.onRowClick} onDeleItem={this.props.onDeleItem}/>;
         }.bind(this));
         return (
             <div className="itemtable">
@@ -288,6 +294,17 @@ let ConsumCopn = React.createClass({
             })
         }).catch(function (err) {
             console.error('fetch error:' + err.message);
+        })
+    },
+
+    handleDeleteItem:function(item){
+        let items = this.state.consumeItems;
+        let idx = items.findIndex((e) => {
+            return e.id == item.id;
+        })
+        items.splice(idx,1);
+        this.setState({
+            consumeItems:items
         })
     },
 
@@ -352,7 +369,7 @@ let ConsumCopn = React.createClass({
                 {modalWin}
                 <div className="consumeMngbox">
                     <Title title="消费" />
-                    <ItemTable consumeItems={this.state.consumeItems} onRowClick={this.handleRowClick} />
+                    <ItemTable consumeItems={this.state.consumeItems} onRowClick={this.handleRowClick} onDeleItem={this.handleDeleteItem}/>
                     <Footer>
                         <input type="button" className="btnAddItem" onClick={this.handleAddItemClick} />
                         <input type="button" className="btnDoCalc" onClick={this.handleDoCalc} />
