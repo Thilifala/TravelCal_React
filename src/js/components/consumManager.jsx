@@ -2,15 +2,16 @@
 import React from 'react';
 import Title from './title.jsx';
 import Footer from './footer.jsx';
+import StaticResultForm from './staticResult.jsx';
 import '../../css/popupWin.less';
 import '../../css/consumManager.less';
 
 //类——消费项
-let ConsumeItem = function (id, name, cost, paid, paidFor) {
+let ConsumeItem = function (id, name, cost, paidName, paidFor) {
     this.id = id || 0;
     this.name = name || '';
     this.cost = cost || 0;
-    this.paid = paid || '';
+    this.paidName = paidName || '';
     this.paidFor = paidFor || [];
 }
 
@@ -35,7 +36,7 @@ let ItemForm = React.createClass({
     //花费
     handleCostChange: function (e) {
         let item = this.state.consumeItem;
-        item.cost = this.refs.txtCost.value;
+        item.cost = parseFloat(this.refs.txtCost.value);
         this.setState({
             consumeItem: item
         })
@@ -62,7 +63,7 @@ let ItemForm = React.createClass({
                     <label>花费</label><input ref="txtCost" type="text" value={this.state.consumeItem.cost} onChange={this.handleCostChange} />
                 </div>
                 <div>
-                    <label>付钱人</label><div className="txtDiv txtPaid" onClick={this.handlePaidClick}>{this.state.consumeItem.paid}</div>
+                    <label>付钱人</label><div className="txtDiv txtPaid" onClick={this.handlePaidClick}>{this.state.consumeItem.paidName}</div>
                 </div>
                 <div>
                     <label>蹭钱的</label><div className="txtDiv txtPaidFor" onClick={this.handlePaidForClick}>{this.state.consumeItem.paidFor.join(',')}</div>
@@ -153,7 +154,7 @@ let ModalWin = React.createClass({
     },
     handlePersonSelectOK: function (name) {
         let consumeItem = this.state.consumeItem;
-        consumeItem.paid = name;
+        consumeItem.paidName = name;
         this.setState({
             isSelectingPer: false,
             consumeItem: consumeItem
@@ -171,7 +172,7 @@ let ModalWin = React.createClass({
                     this.state.isSelectingPer ?
                         <PersonSelector
                             personArr={this.props.personArr}
-                            selectedPer={this.state.isMutiSelect ? this.state.consumeItem.paidFor : this.state.consumeItem.paid}
+                            selectedPer={this.state.isMutiSelect ? this.state.consumeItem.paidFor : this.state.consumeItem.paidName}
                             isMutiSelect={this.state.isMutiSelect}
                             onPersonSelectOK={this.handlePersonSelectOK}
                             onPerMutiSelectOK={this.handlePerMutiSelectOK}
@@ -237,7 +238,7 @@ class RowForItem extends React.Component {
                 onTouchCancel={this.handlerTouchCancel}>
                 <div>{consume.name}</div>
                 <div>{consume.cost}</div>
-                <div>{consume.paid}</div>
+                <div>{consume.paidName}</div>
                 <div>{consume.paidFor.join(',')}</div>
             </div>
         )
@@ -332,7 +333,9 @@ let ConsumCopn = React.createClass({
             return e.id == item.id;
         })
         if (currIndex < 0) {
-            items.push(item);
+            if(item.paidName && item.paidFor.length > 0){
+                items.push(item);
+            }
             this.setState({
                 isEditing: false,
                 consumeItems: items
@@ -344,7 +347,6 @@ let ConsumCopn = React.createClass({
                 isEditing: false,
             })
         }
-       
     },
     //计算
     handleDoCalc: function () {
@@ -370,6 +372,7 @@ let ConsumCopn = React.createClass({
                 <div className="consumeMngbox">
                     <Title title="消费" />
                     <ItemTable consumeItems={this.state.consumeItems} onRowClick={this.handleRowClick} onDeleItem={this.handleDeleteItem}/>
+                    <StaticResultForm consumeItems={this.state.consumeItems}/>
                     <Footer>
                         <input type="button" className="btnAddItem" onClick={this.handleAddItemClick} />
                         <input type="button" className="btnDoCalc" onClick={this.handleDoCalc} />
