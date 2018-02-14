@@ -59,7 +59,7 @@ class StaticResultForm extends React.Component{
             return <RowForStatic personFee={item} key={index}/>;
         }.bind(this));
         return (
-            <div className="itemtable">
+            <div className="statictable itemtable">
                 <div className="thead">
                     <div>名字</div>
                     <div>总付</div>

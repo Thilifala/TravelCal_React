@@ -1,5 +1,6 @@
 // 参与人管理
 import React from 'react';
+import {Link} from 'react-router-dom';
 import '../../css/personManager.less';
 import '../../css/popupWin.less';
 import Title from './title.jsx';
@@ -127,7 +128,7 @@ let PersonCopn = React.createClass({
                 {this.state.showPopupWin ? popupWin : ''}
                 <Footer>
                     <input type="button" className="btnAddPerson" onClick={this.handleAddPersonClick} />
-                    <input type="button" className="btnAddPersonOK" />
+                    <Link to='/consum' className="btnAddPersonOK" />
                 </Footer>
             </div>
         );
