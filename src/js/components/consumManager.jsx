@@ -278,26 +278,12 @@ let ConsumCopn = React.createClass({
         return {
             isEditing: false,
             editingItemId: -1,
-            personArr: [],
+            personArr: this.props.location.state ||[] ,
             consumeItems: []
         }
     },
 
     componentDidMount: function () {
-        //TODO:fetch PersonArr
-        let copn = this;
-        fetch('mock/person.json').then(function (resp) {
-            if (resp.ok) {
-                return resp.json();
-            }
-        }).then(function (data) {
-            let personArr = data || [];
-            copn.setState({
-                personArr: personArr
-            })
-        }).catch(function (err) {
-            console.error('fetch error:' + err.message);
-        })
     },
 
     handleDeleteItem:function(item){

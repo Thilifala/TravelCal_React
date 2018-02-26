@@ -23,7 +23,7 @@ class AppRouter extends React.Component {
                             <Redirect to="/person" />
                         )} />
                         <Route path="/person" component={PersonCopn} />
-                        <Route path="/consum/" component={ConsumCopn} />
+                        <Route path="/consum" component={ConsumCopn} />
                     </AnimatedSwitch>
                 </Router>
             </App>

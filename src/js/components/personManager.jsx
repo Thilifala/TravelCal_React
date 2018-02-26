@@ -70,7 +70,8 @@ let PersonCopn = React.createClass({
             editingIndex: -1,
         }
     },
-    componentDidMount: function () {
+    //fetch获取文档数据
+    fetchData: function () {
         let copn = this;
         fetch('mock/person.json').then(function (resp) {
             if (resp.ok) {
@@ -84,6 +85,27 @@ let PersonCopn = React.createClass({
         }).catch(function (err) {
             console.error('fetch error:' + err.message);
         });
+    },
+    //通过读写localstorage设置“人列表”
+    setPersonArr:function(newPersonArr){
+        if (typeof (Storage) !== "undefinded") {
+            //放到本地存储，目的是为了下次打开app时还能读到
+            if(newPersonArr) localStorage.setItem('personArr',JSON.stringify(newPersonArr));
+            //读取本地存储
+            let personArr = JSON.parse(localStorage.getItem('personArr'));
+            //排除非数组
+            if(Object.prototype.toString.call(personArr) !== '[object Array]') return;
+            this.setState({
+                personArr:personArr || []
+            });
+        }
+        else{
+            console.error('sorry,你的渣渣浏览器不支持Web Storage...');
+        }
+    },
+    componentDidMount: function () {
+        // this.fetchData();
+        this.setPersonArr();
     },
     handleAddPersonClick: function (name, editingIndex) {
         name = typeof name == 'string' && name.constructor == String ? name : '';
@@ -105,16 +127,14 @@ let PersonCopn = React.createClass({
             }
         }
         this.setState({
-            personArr: personArr,
             showPopupWin: false
-        })
+        });
+        this.setPersonArr(personArr);
     },
     handlePersonDel: function (index) {
         let personArr = this.state.personArr;
         personArr.splice(index, 1);
-        this.setState({
-            personArr: personArr
-        })
+        this.setPersonArr(personArr);
     },
     render: function () {
         let popupWin = <PopupWin personName={this.state.editingName}
@@ -128,7 +148,7 @@ let PersonCopn = React.createClass({
                 {this.state.showPopupWin ? popupWin : ''}
                 <Footer>
                     <input type="button" className="btnAddPerson" onClick={this.handleAddPersonClick} />
-                    <Link to='/consum' className="btnAddPersonOK" />
+                    <Link to={{pathname:'/consum',state: this.state.personArr}} className="btnAddPersonOK" />
                 </Footer>
             </div>
         );

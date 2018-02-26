@@ -3,8 +3,9 @@
 * webpack
 * react
 * less
+* react-router V4
 
 ### will use
 * redux
-* react-router
+* localStorage
 * webpack HMR
