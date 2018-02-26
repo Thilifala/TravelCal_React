@@ -1,5 +1,7 @@
 // 消费管理
 import React from 'react';
+import { createHashHistory  } from 'history';
+
 import Title from './title.jsx';
 import Footer from './footer.jsx';
 import StaticResultForm from './staticResult.jsx';
@@ -354,7 +356,7 @@ let ConsumCopn = React.createClass({
     },
     //返回
     handleBack: function () {
-
+        createHashHistory().goBack();
     },
 
     render: function () {

@@ -1,8 +1,7 @@
-// var React = require('react');
-// var ReactDom = require('react-dom');
 import React from 'react';
 import ReactDom from 'react-dom';
-import { HashRouter,BrowserRouter,Switch,Route,IndexRoute} from 'react-router-dom';
+import { AnimatedSwitch } from 'react-router-transition';
+import { HashRouter as Router,BrowserRouter,Switch,Route,IndexRoute,Redirect} from 'react-router-dom';
 
 import App from './components/app.jsx';
 import PersonCopn from './components/personManager.jsx';
@@ -12,15 +11,22 @@ import '../css/app.less';
 class AppRouter extends React.Component {
     render() {
         return (
-            <BrowserRouter>
-                <IndexRoute component={PersonCopn}/>
-                {/* <Route exact path={'/'} component={App}>
-                </Route> */}
-                <Switch>
-                    <Route path="/person" component={PersonCopn} />
-                    <Route path="/consum" component={ConsumCopn} />
-                </Switch>
-            </BrowserRouter>
+            <App className='appstyle'>
+                <Router>
+                    <AnimatedSwitch
+                        atEnter={{ opacity: 0 }}
+                        atLeave={{ opacity: 0 }}
+                        atActive={{ opacity: 1 }}
+                        className="fade-router"
+                    >
+                        <Route exact path="/" render={() => (
+                            <Redirect to="/person" />
+                        )} />
+                        <Route path="/person" component={PersonCopn} />
+                        <Route path="/consum/" component={ConsumCopn} />
+                    </AnimatedSwitch>
+                </Router>
+            </App>
         )
     }
 }
@@ -28,9 +34,3 @@ class AppRouter extends React.Component {
 ReactDom.render((
     <AppRouter/>
 ), document.getElementById('container'));
-
-// ReactDom.render((
-//     <App className="appstyle">
-//          <PersonCopn /> 
-//     </App>
-// ), document.getElementById('container'));
