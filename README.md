@@ -4,8 +4,9 @@
 * react
 * less
 * react-router V4
+* localStorage
 
 ### will use
 * redux
-* localStorage
 * webpack HMR
+* css animation

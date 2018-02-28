@@ -1,19 +1,30 @@
 
 .personMngbox{
     .personRowBox{
-        margin: 10px 0;
-        div{
+        margin: 0;
+        height: 35px;
+        line-height: 35px;
+        .txtName{
             width:80%;
             text-align: center;
             float: left;
+            border-bottom: 1px solid rgb(221,221,221);            
         }
-        input{
-
+        .txtName:active{
+            background-color: #ddd;
+        }
+        .boxBtn{
+            width:20%;
+            height: 35px;
+            float: left;
         }
     }
    .btnDelPer{
+       display: block;
+       margin-left: auto;
+       margin-right: auto;
        width: 20px;
-       height: 20px;
+       height: 35px;
        border: none;
        background: url(../img/del.png) no-repeat 0;
        background-size: 20px;

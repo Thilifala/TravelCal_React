@@ -1,0 +1,62 @@
+.img-style{
+    width:30px;
+    height: 100%;
+    background-size: 25px;
+    float: left;
+}
+
+.cost-img{
+    background: url(../img/money.png) no-repeat 0;    
+    .img-style;
+}
+.item-img{
+    background: url(../img/travel.png) no-repeat 0;    
+    .img-style;
+}
+.paid-img{
+    background: url(../img/cry.png) no-repeat 0;    
+    .img-style;
+}
+.paidfor-img{
+    background: url(../img/laugh.png) no-repeat 0;    
+    .img-style;
+}
+
+.consumeCardBox{
+    .cardrow{
+        width:100%; 
+        height: 9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .cardBox{
+            width:80%; 
+            height: 8rem;
+            border:1px solid #ddd;
+            border-radius:5px;
+            background-color: white;
+            padding:0 24px;
+            .titleBox{
+                height: 2.5rem;
+                line-height: 2.5rem;
+                font-weight: bold;
+                border-bottom: 1px solid #ddd;
+            }
+            .cost{
+                float: right;
+                height: 100%;
+                color:orange;
+            }
+            .paidName{
+                height: 2rem;
+                line-height: 2rem;
+            }
+            .paidFor{
+                height: 2rem;
+            }
+            .paidfor-list{
+
+            }
+        }
+    }
+}

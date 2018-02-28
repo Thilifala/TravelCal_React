@@ -41,8 +41,10 @@ let PersonRow = React.createClass({
     render: function () {
         return (
             <div className="personRowBox">
-                <div onClick={this.handleRowClick}>{this.props.personName}</div>
-                <input type="button" className="btnDelPer" onClick={this.handleDel} />
+                <div className="txtName" onClick={this.handleRowClick}>{this.props.personName}</div>
+                <div className="boxBtn">
+                    <input type="button" className="btnDelPer" onClick={this.handleDel} />
+                </div>
             </div>
         )
     }

@@ -1,0 +1,38 @@
+#trow{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+    height: 2rem;
+    border-bottom:1px solid blueviolet;
+    div{
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    div:nth-child(1){
+        width:25%;
+    }
+    div:nth-child(2){
+        width:15%;
+    }
+    div:nth-child(3){
+        width:25%;
+    }
+    div:nth-child(4){
+        width:35%;
+    }
+}
+
+.itemtable{
+    .thead{
+        // 语法：mixin
+        #trow;
+        font-weight:bold;
+    }
+    .trow{
+        #trow;
+    }
+}
+
