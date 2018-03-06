@@ -139,13 +139,13 @@ let ModalWin = React.createClass({
     getInitialState: function () {
         return {
             consumeItem: this.props.consumeItem,
-            isSelectingPer: false,
+            showPerSelector: false,
             isMutiSelect: false
         }
     },
     handlePersonCtlTab: function (isMutiSelect) {
         this.setState({
-            isSelectingPer: true,
+            showPerSelector: true,
             isMutiSelect: isMutiSelect
         })
     },
@@ -153,7 +153,7 @@ let ModalWin = React.createClass({
         let consumeItem = this.state.consumeItem;
         consumeItem.paidFor = nameArr;
         this.setState({
-            isSelectingPer: false,
+            showPerSelector: false,
             consumeItem: consumeItem
         })
     },
@@ -161,7 +161,7 @@ let ModalWin = React.createClass({
         let consumeItem = this.state.consumeItem;
         consumeItem.paidName = name;
         this.setState({
-            isSelectingPer: false,
+            showPerSelector: false,
             consumeItem: consumeItem
         })
     },
@@ -174,7 +174,7 @@ let ModalWin = React.createClass({
                     consumeItem={this.props.consumeItem}
                 />
                 {
-                    this.state.isSelectingPer ?
+                    this.state.showPerSelector ?
                         <PersonSelector
                             personArr={this.props.personArr}
                             selectedPer={this.state.isMutiSelect ? this.state.consumeItem.paidFor : this.state.consumeItem.paidName}
@@ -193,9 +193,8 @@ let ModalWin = React.createClass({
 let ConsumCopn = React.createClass({
     getInitialState: function () {
         return {
-            isEditing: false,
+            showPopupWin: false,
             editingItemId: -1,
-            personArr: this.props.location.state ||[] ,
             consumeItems: [],
             activeTab:0
         }
@@ -224,7 +223,7 @@ let ConsumCopn = React.createClass({
     handleRowClick:function(item){
         console.log('handleRowClick:'+ item.id);
         this.setState({
-            isEditing: true,
+            showPopupWin: true,
             editingItemId: item.id
         })
     },
@@ -232,7 +231,7 @@ let ConsumCopn = React.createClass({
     //点击添加项目
     handleAddItemClick: function () {
         this.setState({
-            isEditing: true,
+            showPopupWin: true,
             editingItemId: this.state.consumeItems.length
         })
     },
@@ -249,14 +248,14 @@ let ConsumCopn = React.createClass({
                 items.push(item);
             }
             this.setState({
-                isEditing: false,
+                showPopupWin: false,
                 consumeItems: items
             })
         }
         else{
             items.splice(currIndex,1,item);
             this.setState({
-                isEditing: false,
+                showPopupWin: false,
             })
         }
     },
@@ -286,8 +285,8 @@ let ConsumCopn = React.createClass({
         let editingId = this.state.editingItemId;
         let currItems = this.state.consumeItems;
         let editingItem = editingId == currItems.length ? new ConsumeItem(editingId) : currItems[editingId];
-        if (this.state.isEditing) {
-            modalWin = <ModalWin onEditItemOK={this.handleEditItemOK} consumeItem={editingItem} personArr={this.state.personArr} />;
+        if (this.state.showPopupWin) {
+            modalWin = <ModalWin onEditItemOK={this.handleEditItemOK} consumeItem={editingItem} personArr={this.props.location.state || []} />;
         }
         return (
             <div>

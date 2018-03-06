@@ -6,12 +6,11 @@ import { HashRouter as Router,BrowserRouter,Switch,Route,IndexRoute,Redirect} fr
 import App from './components/app.jsx';
 import PersonCopn from './components/personManager.jsx';
 import ConsumCopn from './components/consumManager.jsx';
-import '../css/app.less';
 
 class AppRouter extends React.Component {
     render() {
         return (
-            <App className='appstyle'>
+            <App>
                 <Router>
                     <AnimatedSwitch
                         atEnter={{ opacity: 0 }}

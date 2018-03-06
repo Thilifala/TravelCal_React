@@ -68,7 +68,6 @@ let PersonCopn = React.createClass({
         return {
             personArr: [],
             showPopupWin: false,
-            editingName: '',
             editingIndex: -1,
         }
     },
@@ -114,7 +113,6 @@ let PersonCopn = React.createClass({
         editingIndex = isNaN(editingIndex) ? -1 : editingIndex;
         this.setState({
             showPopupWin: true,
-            editingName: name || '',
             editingIndex: editingIndex
         })
     },
@@ -139,7 +137,8 @@ let PersonCopn = React.createClass({
         this.setPersonArr(personArr);
     },
     render: function () {
-        let popupWin = <PopupWin personName={this.state.editingName}
+        let editingName = this.state.personArr[this.state.editingIndex] || "";
+        let popupWin = <PopupWin personName={editingName}
             onPersonEditOK={this.handlePopWinOK}
             editingIndex={this.state.editingIndex}
         />;
