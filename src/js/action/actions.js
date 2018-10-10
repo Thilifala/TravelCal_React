@@ -12,9 +12,11 @@ export const UPDATE_PERARR = "UPDATE_PERARR";
  * 消费项的增删改
  */
 
-export const ADD_CONSUME = "ADD_CONSUME";
-export const DELETE_CONSUME = "DELETE_CONSUME";
-export const MODIFY_CONSUME = "MODIFY_CONSUME";
+export const ConsumeOperation = {
+    ADD_CONSUME: "ADD_CONSUME",
+    DELETE_CONSUME: "DELETE_CONSUME",
+    MODIFY_CONSUME: "MODIFY_CONSUME"
+}
 
 /*
  * 界面
