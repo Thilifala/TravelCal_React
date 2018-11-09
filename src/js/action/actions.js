@@ -30,9 +30,15 @@ export const TOGGLE_TAB = "TOGGLE_TAB";
  */
 
 export function updatePerArr(perArr) {
-    return { type: UPDATE_PERARR, perArr }
+    return { 
+        type: UPDATE_PERARR, 
+        perArr 
+    }
 }
 
 export function showPerModal(editingIndex){
-    return {type:SHOW_MODAL_PER,editingIndex}
+    return {
+        type:SHOW_MODAL_PER,
+        editingIndex
+    }
 }

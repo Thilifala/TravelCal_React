@@ -3,9 +3,19 @@ import ReactDom from 'react-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 import { HashRouter as Router,BrowserRouter,Switch,Route,IndexRoute,Redirect} from 'react-router-dom';
 
+import {createStore} from 'redux';
+import {changePopupWinState} from './reducer/reducer';
+
 import App from './components/app.jsx';
 import PersonCopn from './components/personManager.jsx';
 import ConsumCopn from './components/consumManager.jsx';
+
+//redux test
+let store = createStore(changePopupWinState,{showPopupWin:false});
+store.subscribe(() => {
+    console.log(store.getState())
+})
+window.store = store;
 
 class AppRouter extends React.Component {
     render() {
