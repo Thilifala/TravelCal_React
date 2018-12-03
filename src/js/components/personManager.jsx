@@ -146,10 +146,10 @@ let PersonCopn = React.createClass({
             <div className="personMngbox">
                 <Title title="人" />
                 <PersonList person={this.state.personArr} onRowClick={this.handleAddPersonClick} onPersonDel={this.handlePersonDel} />
-                {this.state.showPopupWin ? popupWin : ''}
+                {this.props.showPopupWin ? popupWin : ''}
                 <Footer>
                     <input type="button" className="btnAddPerson" onClick={this.handleAddPersonClick} />
-                    <Link to={{pathname:'/consum',state: this.state.personArr}} className="btnAddPersonOK" />
+                    {/* <Link to={{pathname:'/consum',state: this.state.personArr}} className="btnAddPersonOK" /> */}
                 </Footer>
             </div>
         );
