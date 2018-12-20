@@ -6,7 +6,7 @@ import '../../css/popupWin.less';
 import Title from './title.jsx';
 import Footer from './footer.jsx';
 
-//弹窗
+//弹窗  
 let PopupWin = React.createClass({
     getInitialState: function () {
         return {
@@ -96,9 +96,8 @@ let PersonCopn = React.createClass({
             let personArr = JSON.parse(localStorage.getItem('personArr'));
             //排除非数组
             if(Object.prototype.toString.call(personArr) !== '[object Array]') return;
-            this.setState({
-                personArr:personArr || []
-            });
+
+            this.props.onUpdatePerArr(personArr || []);          
         }
         else{
             console.error('sorry,你的渣渣浏览器不支持Web Storage...');
@@ -111,13 +110,11 @@ let PersonCopn = React.createClass({
     handleAddPersonClick: function (name, editingIndex) {
         name = typeof name == 'string' && name.constructor == String ? name : '';
         editingIndex = isNaN(editingIndex) ? -1 : editingIndex;
-        this.setState({
-            showPopupWin: true,
-            editingIndex: editingIndex
-        })
+
+        this.props.showAddPerWin(editingIndex);       
     },
     handlePopWinOK: function (name, index) {
-        let personArr = this.state.personArr;
+        let personArr = this.props.personArr;
         if (name) {
             if (index >= 0) {
                 personArr[index] = name;
@@ -126,26 +123,24 @@ let PersonCopn = React.createClass({
                 personArr.push(name);
             }
         }
-        this.setState({
-            showPopupWin: false
-        });
+        this.props.closePerModel();
         this.setPersonArr(personArr);
     },
     handlePersonDel: function (index) {
-        let personArr = this.state.personArr;
+        let personArr = this.props.personArr;
         personArr.splice(index, 1);
         this.setPersonArr(personArr);
     },
     render: function () {
-        let editingName = this.state.personArr[this.state.editingIndex] || "";
+        let editingName = this.props.personArr[this.props.editingIndex] || "";
         let popupWin = <PopupWin personName={editingName}
             onPersonEditOK={this.handlePopWinOK}
-            editingIndex={this.state.editingIndex}
+            editingIndex={this.props.editingIndex}
         />;
         return (
             <div className="personMngbox">
                 <Title title="人" />
-                <PersonList person={this.state.personArr} onRowClick={this.handleAddPersonClick} onPersonDel={this.handlePersonDel} />
+                <PersonList person={this.props.personArr} onRowClick={this.handleAddPersonClick} onPersonDel={this.handlePersonDel} />
                 {this.props.showPopupWin ? popupWin : ''}
                 <Footer>
                     <input type="button" className="btnAddPerson" onClick={this.handleAddPersonClick} />

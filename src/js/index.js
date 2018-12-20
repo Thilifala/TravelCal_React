@@ -12,10 +12,10 @@ import {Provider} from 'react-redux';
 import {popupWinControl} from './reducer/reducer';
 import PersonManagerLink from './containers/personManagerLink';
 
-
+let store = createStore(popupWinControl);
 
 //redux test
-let store = createStore(popupWinControl,{showPopupWin:false});
+// let store = createStore(popupWinControl,{showPopupWin:true});
 store.subscribe(() => {
     console.log(store.getState())
 })

@@ -3,7 +3,7 @@
  * 人的增删改
  */
 
-// export const ADD_PER = "ADD_PER";
+ export const CLOSE_MODAL_PER = "CLOSE_MODAL_PER";
 // export const DELETE_PER = "DELETE_PER";
 // export const MODIFY_PER = "MODIFY_PER";
 export const UPDATE_PERARR = "UPDATE_PERARR";
@@ -29,10 +29,10 @@ export const TOGGLE_TAB = "TOGGLE_TAB";
  * action 创建函数
  */
 
-export function updatePerArr(perArr) {
+export function updatePerArr(personArr) {
     return { 
         type: UPDATE_PERARR, 
-        perArr 
+        personArr 
     }
 }
 
@@ -40,5 +40,11 @@ export function showPerModal(editingIndex){
     return {
         type:SHOW_MODAL_PER,
         editingIndex
+    }
+}
+
+export function closePerModel(){
+    return {
+        type:CLOSE_MODAL_PER
     }
 }
