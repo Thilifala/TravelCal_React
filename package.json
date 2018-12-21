@@ -1,5 +1,5 @@
 {
-  "name": "TRAVELCAL",
+  "name": "travel_cal",
   "version": "1.0.0",
   "description": "webpack for travelCal.",
   "main": "index.js",

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-// import { AnimatedSwitch } from 'react-router-transition';
-// import { HashRouter as Router,BrowserRouter,Switch,Route,IndexRoute,Redirect} from 'react-router-dom';
+import { AnimatedSwitch } from 'react-router-transition';
+import { HashRouter as Router,BrowserRouter,Switch,Route,IndexRoute,Redirect} from 'react-router-dom';
 
 import App from './components/app.jsx';
 import PersonCopn from './components/personManager.jsx';
@@ -14,7 +14,7 @@ import PersonManagerLink from './containers/personManagerLink';
 
 let store = createStore(popupWinControl);
 
-//redux test
+// //redux test
 // let store = createStore(popupWinControl,{showPopupWin:true});
 store.subscribe(() => {
     console.log(store.getState())
@@ -54,7 +54,21 @@ class ReduxApp extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <PersonManagerLink />
+                <App>
+                    <Router>
+                        <AnimatedSwitch
+                            atEnter={{ opacity: 0 }}
+                            atLeave={{ opacity: 0 }}
+                            atActive={{ opacity: 1 }}
+                            className="fade-router"
+                        >
+                            <Route exact path="/" render={() => (
+                                <Redirect to="/person" />
+                            )} />
+                            <Route path="/person" component={PersonManagerLink} />
+                        </AnimatedSwitch>
+                    </Router>
+                </App>
             </Provider>
         )
     }

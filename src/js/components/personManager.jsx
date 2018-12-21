@@ -144,7 +144,7 @@ let PersonCopn = React.createClass({
                 {this.props.showPopupWin ? popupWin : ''}
                 <Footer>
                     <input type="button" className="btnAddPerson" onClick={this.handleAddPersonClick} />
-                    {/* <Link to={{pathname:'/consum',state: this.state.personArr}} className="btnAddPersonOK" /> */}
+                    <Link to={{pathname:'/consum',state: this.props.personArr}} className="btnAddPersonOK" />
                 </Footer>
             </div>
         );
